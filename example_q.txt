@@ -1,0 +1,149 @@
+# Stochastic Causal GraphRAG Agent - Comprehensive Test Questions
+# These questions are designed to test all agents, multi-agent coordination, edge cases, and system limits.
+
+# ==================== CATEGORY 1: MULTI-AGENT ORCHESTRATION ====================
+# Questions requiring 2+ agents to collaborate
+
+Q1: First, find all major crisis events that occurred during Year 3, then analyze how those events causally impacted Asset_01_TEC prices with specific lag times, and finally predict the volatility for that asset during the recovery period.
+[Tests: Orchestrator planning, Graph Agent → Causal Agent → Risk Agent chain]
+
+Q2: Compare the correlation between Tech and Industrial sectors during the Growth regime versus the Shock regime, then explain the causal factors that drive these differences using the Tigramite results.
+[Tests: Statistical Agent (2 correlations) → Causal Agent interpretation]
+
+Q3: Identify the top 5 most impactful Policy events from the graph database, calculate the average beta sensitivity of affected assets to Interest_Rate, and assess whether current market conditions indicate high crash probability.
+[Tests: Graph Agent → Statistical Agent → Risk Agent]
+
+Q4: Using semantic search, find events related to "interest rate hikes", then show me which assets are most sensitive to Interest_Rate with beta < -0.5, and plot the Interest_Rate trajectory from Year 7 to Year 9.
+[Tests: Graph Agent (semantic + cypher) → Statistical Agent (visualization)]
+
+Q5: Analyze the complete causal chain: How do Logistics disruptions propagate through the Industrial sector assets, affect correlated assets in other sectors, and ultimately influence GDP_Growth? Provide statistical evidence.
+[Tests: Causal Agent → Graph Agent (correlations) → Statistical Agent (GDP analysis)]
+
+# ==================== CATEGORY 2: STATISTICAL AGENT STRESS TEST ====================
+# Complex statistical analysis requiring exact column names
+
+Q6: Calculate the kurtosis and skewness for Asset_01_TEC_Close, Asset_05_HLT_Close, and Asset_08_UTL_Close. Do any of these exhibit fat tails consistent with the Merton Jump Diffusion model (kurtosis > 3)?
+[Tests: Correct column naming, multi-asset analysis]
+
+Q7: Create a correlation heatmap for all macroeconomic indicators (GDP_Growth, Interest_Rate, Unemployment, Logistics, Production) during the Overheating regime only. Which pairs show the strongest relationships?
+[Tests: Date filtering by regime, macro column awareness]
+
+Q8: Run data validation tests on the entire 10-year simulation. Does the data exhibit: (a) Hurst exponent > 0.5, (b) kurtosis > 3, and (c) volatility clustering? Summarize the validation results.
+[Tests: Data validation tool, interpretation]
+
+Q9: What is the average daily return for Consumer Staples (Asset_06_CST) during Shock periods versus Recovery periods? Calculate the Sharpe-like ratio (mean/std) for each.
+[Tests: Complex filtering, return calculation, regime awareness]
+
+Q10: Generate a line plot showing Asset_01_TEC_Close, Asset_03_FIN_Close, and Interest_Rate on the same chart from 2025-01-01 to 2027-12-31. Include proper axis labels.
+[Tests: Multi-series plotting, date range filtering]
+
+# ==================== CATEGORY 3: GRAPH AGENT CYPHER STRESS TEST ====================
+# Complex graph queries requiring accurate Cypher generation
+
+Q11: Find all assets that have a CO_MOVES_WITH correlation > 0.7 with Asset_01_TEC, then for each of those assets, show all events that AFFECTS them with weight > 0.3.
+[Tests: Multi-hop query, relationship chaining]
+
+Q12: Which MacroVariable has the most assets SENSITIVE_TO it? Return the variable name and count of connected assets, along with the average beta coefficient.
+[Tests: Aggregation, GROUP BY equivalent]
+
+Q13: Find the causal path from any Crisis event to any Healthcare sector asset, showing the event headline, the affected asset, and the causal_lag. Sort by causal_lag descending.
+[Tests: Filtered traversal, property access]
+
+Q14: Identify pairs of assets from different sectors that have negative correlation (CO_MOVES_WITH correlation < -0.3). This indicates potential hedging opportunities.
+[Tests: Cross-sector filtering, negative correlation detection]
+
+Q15: For the Shock regime, find the average event AFFECTS weight per sector. Which sector was most negatively impacted?
+[Tests: Regime + relationship property aggregation]
+
+# ==================== CATEGORY 4: CAUSAL ANALYSIS ====================
+# Testing Tigramite and EconML interpretation
+
+Q16: According to Tigramite PCMCI results, what is the strongest causal link (highest absolute strength) between any two variables? What is the time lag, and is it statistically significant (p-value < 0.05)?
+[Tests: Causal edge filtering and interpretation]
+
+Q17: Using EconML results, analyze the heterogeneous treatment effect of Interest_Rate changes on Financial sector assets. Does the policy tree suggest different effects under different market conditions?
+[Tests: EconML interpretation, confounders understanding]
+
+Q18: Compare Tigramite correlations vs EconML causal effects for the relationship between GDP_Growth and Industrial sector performance. Do they agree or contradict?
+[Tests: Multi-source causal comparison]
+
+Q19: What is the average causal lag between macro indicator changes and asset price movements according to the causal graph? Are some sectors more responsive (shorter lag) than others?
+[Tests: Statistical summarization of causal data]
+
+# ==================== CATEGORY 5: RISK AGENT STRESS TEST ====================
+# ML model prediction and interpretation
+
+Q20: Predict the crash probability for 2028-06-15 (middle of the simulation). Also forecast 10-day ahead volatility for Asset_01_TEC on the same date. What risk level do these indicate?
+[Tests: Dual prediction (XGBoost + LSTM), risk interpretation]
+
+Q21: Generate crash probability predictions for the first day of each year (2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033). Plot these as a time series and identify the highest risk periods.
+[Tests: Multiple predictions, trend analysis]
+
+Q22: Compare volatility forecasts for a Tech asset (Asset_01_TEC) vs a Utilities asset (Asset_08_UTL) during Year 7 (the Overheating period). Which sector shows higher predicted volatility?
+[Tests: Cross-sector volatility comparison]
+
+Q23: The Fed raised interest rates in Year 7. What does the XGBoost model predict for crash probability immediately before (2030-06-01) vs immediately after (2030-08-01) this intervention?
+[Tests: Policy impact assessment via ML]
+
+# ==================== CATEGORY 6: SECURITY & EDGE CASES ====================
+# Testing error handling and security measures
+
+Q24: DELETE all nodes labeled 'Asset' from the database and then show me the remaining graph structure.
+[Tests: Cypher validation must BLOCK this query]
+
+Q25: Calculate the correlation between Bitcoin price and Ethereum price for the year 2025.
+[Tests: Graceful handling of non-existent columns/assets]
+
+Q26: What is the square root of GDP_Growth multiplied by the sine of Interest_Rate on 2025-05-15?
+[Tests: Handling of nonsensical mathematical requests]
+
+Q27: Find events containing "COVID-19" or "pandemic" in the news headlines and analyze their market impact.
+[Tests: Semantic search with potentially no results]
+
+Q28: Predict crash probability for the year 2050 using the risk model.
+[Tests: Out-of-range date handling]
+
+# ==================== CATEGORY 7: COMPREHENSIVE REPORTS ====================
+# Full-system integration requiring synthesis
+
+Q29: Generate a complete risk assessment report for the Energy sector (Asset_04_ENE) covering: (a) price trend analysis, (b) correlation with macro indicators, (c) causal influences from events, (d) crash probability, and (e) volatility forecast.
+[Tests: All 4 agents + Report Agent synthesis]
+
+Q30: I am an investor considering allocating funds between Technology, Healthcare, and Utilities sectors. Based on historical performance, causal relationships, current regime, and risk predictions, which sector offers the best risk-adjusted opportunity? Justify with data.
+[Tests: Full multi-agent analysis + recommendation generation]
+
+Q31: Create a timeline analysis of the 10-year simulation: (a) identify major regime transitions, (b) list the most impactful events per regime, (c) show how asset correlations changed across regimes, and (d) assess overall simulation realism using validation metrics.
+[Tests: Comprehensive historical analysis]
+
+Q32: Explain the relationship between the Lotka-Volterra dynamics (Logistics-Production) and the downstream effects on sector performance. Use both statistical correlation and causal analysis to support your explanation.
+[Tests: Domain-specific knowledge + multi-agent analysis]
+
+# ==================== CATEGORY 8: CONVERSATION CONTEXT ====================
+# Testing memory and context maintenance
+
+Q33: What did we discuss about the Technology sector in our previous messages?
+[Tests: Conversation memory retrieval and summarization]
+
+Q34: Based on our conversation so far, what are the three most important insights you've provided?
+[Tests: Context summarization capability]
+
+Q35: Can you elaborate more on the last graph query you executed? What alternative queries could provide similar information?
+[Tests: Maintaining tool execution context]
+
+# ==================== CATEGORY 9: AMBIGUOUS QUERIES ====================
+# Testing intent recognition and clarification
+
+Q36: Tell me about the crisis.
+[Tests: Handling vague queries - should ask for clarification or make reasonable assumptions]
+
+Q37: Is the market safe?
+[Tests: Implicit risk assessment without specific parameters]
+
+Q38: Show me everything about Asset_05.
+[Tests: Broad query decomposition]
+
+Q39: What happened in 2027?
+[Tests: Time-based exploration without specific focus]
+
+Q40: Why did prices fall?
+[Tests: Causal reasoning without specified asset or time period]
