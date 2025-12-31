@@ -39,11 +39,10 @@ The system operates in four main phases:
 ## 📸 Screenshots
 
 <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-    <!-- Replace src with your screenshot paths -->
-    <img src="path/to/screenshot1.png" alt="Dashboard Overview" width="45%">
-    <img src="path/to/screenshot2.png" alt="Graph Visualization" width="45%">
-    <img src="path/to/screenshot3.png" alt="Causal Analysis" width="45%">
-    <img src="path/to/screenshot4.png" alt="Chat Interface" width="45%">
+    <img src="streamlit_ss/Chatbot.png" alt="Chatbot" width="45%">
+    <img src="streamlit_ss/Agent_Communication.png" alt="Agent Communication" width="45%">
+    <img src="streamlit_ss/Statistics.png" alt="Statistics" width="45%">
+    <img src="streamlit_ss/Schema_Graph.png" alt="Schema Graph" width="45%">
 </div>
 
 ## 🛠️ Technology Stack
@@ -189,11 +188,3 @@ $$ d\beta_t = \kappa (\theta - \beta_t) dt + \sigma_{\beta} dW_t $$
 
 *   **$\beta_t$:** Sensitivity of an asset to a factor (Rate, GDP, etc.) at time $t$.
 *   **$\sigma_{\beta}$:** Increases during "Crisis" regimes, causing correlations to break down (contagion effect).
-
-## 🤝 Contributing
-
-Contributions are welcome! Please open an issue to discuss proposed changes or submit a Pull Request.
-
-## 📄 License
-
-This project is licensed under the MIT License.
