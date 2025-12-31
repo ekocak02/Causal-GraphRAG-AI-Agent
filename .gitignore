@@ -1,0 +1,30 @@
+# Ignore Python cache files
+__pycache__/
+
+# Ignore virtual environment directories
+venv/
+
+# Data and Database directories
+data/
+neo4j/
+lancedb_store/
+*.parquet
+*.csv
+*.json
+*.jsonl
+
+# Ignore environment files and model files
+.env
+
+# Ignore Jupyter notebooks and HTML files
+*.ipynb
+*.html
+
+# Ignore model directories
+/models
+
+# Ignore output and conversation directories
+outputs/
+conversations/
+
+
