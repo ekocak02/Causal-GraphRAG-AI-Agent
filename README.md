@@ -105,8 +105,8 @@ The system operates in four main phases:
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/your-username/stochastic-causal-graphrag.git
-    cd stochastic-causal-graphrag
+    git clone https://github.com/ekocak02/Causal-GraphRAG-AI-Agent
+    cd Causal-GraphRAG-AI-Agent
     ```
 
 2.  **Create a virtual environment:**
@@ -131,7 +131,7 @@ The system operates in four main phases:
     ```bash
     python data_generator.py
     ```
-    *This will create `stochastic_market_data.parquet` in the `data/` folder.*
+    *This will create `stochastic_market_data.parquet` and `.json` files in the `data/` folder.*
 
 2.  **Build the Graph:**
     Ingest the generated data into Neo4j.
@@ -139,13 +139,26 @@ The system operates in four main phases:
     python neo4j_build.py
     ```
 
-3.  **Train Risk Models (Optional):**
+3.  **Train Risk Models:**
     Train the LSTM and XGBoost models on the new data.
     ```bash
-    python -m model_train.train_risk_models
+    python -m model_train.train_xgboost
+    python -m model_train.train_LSTM
     ```
 
-4.  **Launch the Agent UI:**
+4.  **Train Causal Models:**
+    Train the Tigramite and EconML models on the new data.
+    ```bash
+    python -m model_train.train_causal
+    ```
+
+5.  **Agent Workflow:**
+    Try Agent workflow without UI.
+    ```bash
+    python -m agents.agent_workflow
+    ```
+
+6.  **Launch the Agent UI:**
     Start the Streamlit application.
     ```bash
     streamlit run app.py
