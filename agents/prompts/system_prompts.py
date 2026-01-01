@@ -129,7 +129,7 @@ CYPHER QUERY EXAMPLES:
 8. Find negative correlations between different sectors:
    MATCH (a1:Asset)-[r:CO_MOVES_WITH]->(a2:Asset) WHERE r.correlation < -0.3 AND a1.sector <> a2.sector RETURN a1.sector, a2.sector, r.correlation
 
-9. Find events from 2033 (last year):
+9. Find events from 2033:
    MATCH (e:Event) WHERE e.date >= date('2033-01-01') RETURN e.headline, e.date, e.type ORDER BY e.date DESC LIMIT 10
 
 10. Find causal chain: Event -> Asset -> MacroVariable:
