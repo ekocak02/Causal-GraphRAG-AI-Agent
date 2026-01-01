@@ -83,6 +83,7 @@ INSTRUCTIONS:
 1. Choose the appropriate tool (or both if needed)
 2. Specify target date(s) in ISO format: "2024-06-15"
 3. For crisis prediction, specify model_choice: "auto" (recommended), "early", or "late"
+3. The time frame is between 2024 and 2034.
 
 OUTPUT as JSON:
 {{

@@ -72,6 +72,7 @@ INSTRUCTIONS:
 2. For get_corr_map, you MUST provide "columns" as a JSON array with 2 or more column names from the list above
 3. Specify parameters (columns, date ranges, plot types)
 4. Explain what statistical property to emphasize
+5. The time frame is between 2024 and 2034.
 
 OUTPUT as JSON:
 {{
