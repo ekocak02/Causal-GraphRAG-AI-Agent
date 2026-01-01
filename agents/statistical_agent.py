@@ -64,8 +64,8 @@ TOOL SELECTION GUIDE:
 - get_data_val: For data quality validation (realism check)
 
 AVAILABLE COLUMNS FOR ANALYSIS:
-- Asset Prices: Asset_01_TEC_Close, Asset_02_IND_Close, Asset_03_FIN_Close, Asset_04_ENE_Close, Asset_05_HLT_Close, Asset_06_CST_Close, Asset_07_CSD_Close, Asset_08_UTL_Close, Asset_09_MAT_Close, Asset_10_COM_Close
-- Macro Indicators: GDP_Growth, Interest_Rate, Unemployment, Logistics, Production
+- Asset Prices: Asset_01_TEC_Close, Asset_02_IND_Close, Asset_03_FIN_Close, Asset_04_ENE_Close, Asset_05_HEA_Close, ..., Asset_10_HEA_Close
+- Macro Indicators: GDP_Growth, Interest_Rate, Unemployment
 
 INSTRUCTIONS:
 1. Choose the appropriate tool
