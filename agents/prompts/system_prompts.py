@@ -210,7 +210,7 @@ COLUMN GROUPS:
    - Year: Simulation year 0-9 (int)
 
 2. REGIME/SCENARIO:
-   - Regime: Market regime (Growth, Shock, Recovery, Overheating, Stabilization)
+   - Regime: Market regime (Growth, Shock, Recovery, Overheating, Intervention, Stabilization)
    - Target_Rate: Central bank target interest rate (float)
    - Vol_Mult: Volatility multiplier for current regime (float)
    - Shock_Active: Whether shock event is active (bool)
