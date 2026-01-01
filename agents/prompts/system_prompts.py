@@ -62,13 +62,13 @@ NODES:
    - body: string (detailed description)
    - type: string (Policy, Crisis, Recovery, Market, etc.)
    - date: date (e.g., 2024-03-15)
-   - affected_sector: string (TEC, IND, FIN, ENE, HLT, CST, CSD, UTL, MAT, COM)
-   - regime: string (Growth, Shock, Recovery, Overheating, Stabilization)
+   - affected_sector: string (TEC, IND, FIN, ENE, HEA)
+   - regime: string (Growth, Shock, Recovery, Overheating, Intervention, Stabilization)
    - embedding: vector (768-dim, for semantic search)
 
 2. Asset
    - id: string (e.g., "Asset_01_TEC")
-   - sector: string (TEC, IND, FIN, ENE, HLT, CST, CSD, UTL, MAT, COM)
+   - sector: string (TEC, IND, FIN, ENE, HEA)
    - name: string (e.g., "Technology")
 
 3. MacroVariable
@@ -146,7 +146,7 @@ RULES:
 - Always include date filters when querying events if date range is specified
 - Use ORDER BY for meaningful result ordering
 - If query fails, simplify: reduce filters, use broader matching
-- For sector codes: TEC=Technology, IND=Industrial, FIN=Financial, ENE=Energy, HLT=Healthcare, CST=Consumer Staples, CSD=Consumer Discretionary, UTL=Utilities, MAT=Materials, COM=Communications
+- For sector codes: TEC=Technology, IND=Industrial, FIN=Financial, ENE=Energy, HEA=Healthcare
 """
 
 #CAUSAL AGENT
@@ -227,7 +227,7 @@ COLUMN GROUPS:
    - News_Body: Detailed news text (string)
    - Event_Type: Event category (string)
    - Event_ID: Unique event identifier (string)
-   - Affected_Sector: Sector code TEC/IND/FIN/ENE/HLT/CST/CSD/UTL/MAT/COM (string)
+   - Affected_Sector: Sector code TEC/IND/FIN/ENE/HEA (string)
 
 5. ASSET OHLCV (10 assets × 5 columns = 50 columns):
    Pattern: Asset_XX_YYY_ZZZ where XX=number, YYY=sector, ZZZ=OHLCV type
@@ -236,12 +236,12 @@ COLUMN GROUPS:
    - Asset_02_IND_Close, Asset_02_IND_Open, Asset_02_IND_High, Asset_02_IND_Low, Asset_02_IND_Volume (Industrial)
    - Asset_03_FIN_Close, Asset_03_FIN_Open, Asset_03_FIN_High, Asset_03_FIN_Low, Asset_03_FIN_Volume (Financial)
    - Asset_04_ENE_Close, Asset_04_ENE_Open, Asset_04_ENE_High, Asset_04_ENE_Low, Asset_04_ENE_Volume (Energy)
-   - Asset_05_HLT_Close, Asset_05_HLT_Open, Asset_05_HLT_High, Asset_05_HLT_Low, Asset_05_HLT_Volume (Healthcare)
-   - Asset_06_CST_Close, Asset_06_CST_Open, Asset_06_CST_High, Asset_06_CST_Low, Asset_06_CST_Volume (Consumer Staples)
-   - Asset_07_CSD_Close, Asset_07_CSD_Open, Asset_07_CSD_High, Asset_07_CSD_Low, Asset_07_CSD_Volume (Consumer Discretionary)
-   - Asset_08_UTL_Close, Asset_08_UTL_Open, Asset_08_UTL_High, Asset_08_UTL_Low, Asset_08_UTL_Volume (Utilities)
-   - Asset_09_MAT_Close, Asset_09_MAT_Open, Asset_09_MAT_High, Asset_09_MAT_Low, Asset_09_MAT_Volume (Materials)
-   - Asset_10_COM_Close, Asset_10_COM_Open, Asset_10_COM_High, Asset_10_COM_Low, Asset_10_COM_Volume (Communications)
+   - Asset_05_HEA_Close, Asset_05_HEA_Open, Asset_05_HEA_High, Asset_05_HEA_Low, Asset_05_HEA_Volume (Healthcare)
+   - Asset_06_TEC_Close, Asset_06_TEC_Open, Asset_06_TEC_High, Asset_06_TEC_Low, Asset_06_TEC_Volume (Technology)
+   - Asset_07_IND_Close, Asset_07_IND_Open, Asset_07_IND_High, Asset_07_IND_Low, Asset_07_IND_Volume (Industrial)
+   - Asset_08_FIN_Close, Asset_08_FIN_Open, Asset_08_FIN_High, Asset_08_FIN_Low, Asset_08_FIN_Volume (Financial)
+   - Asset_09_ENE_Close, Asset_09_ENE_Open, Asset_09_ENE_High, Asset_09_ENE_Low, Asset_09_ENE_Volume (Energy)
+   - Asset_10_HEA_Close, Asset_10_HEA_Open, Asset_10_HEA_High, Asset_10_HEA_Low, Asset_10_HEA_Volume (Healthcare)
 
 OUTPUT FORMAT (JSON):
 {
