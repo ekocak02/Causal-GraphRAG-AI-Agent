@@ -131,7 +131,7 @@ The system operates in four main phases:
     ```bash
     python data_generator.py
     ```
-    *This will create `stochastic_market_data.parquet` and `.json` files in the `data/` folder.*
+    *This will create `stochastic_market_data.parquet` and `.jsonl` files in the `data/` folder.*
 
 2.  **Build the Graph:**
     Ingest the generated data into Neo4j.
