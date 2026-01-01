@@ -22,7 +22,7 @@ Q5: Analyze the complete causal chain: How do Logistics disruptions propagate th
 # ==================== CATEGORY 2: STATISTICAL AGENT STRESS TEST ====================
 # Complex statistical analysis requiring exact column names
 
-Q6: Calculate the kurtosis and skewness for Asset_01_TEC_Close, Asset_05_HLT_Close, and Asset_08_UTL_Close. Do any of these exhibit fat tails consistent with the Merton Jump Diffusion model (kurtosis > 3)?
+Q6: Calculate the kurtosis and skewness for Asset_01_TEC_Close, Asset_05_HEA_Close, and Asset_08_FIN_Close. Do any of these exhibit fat tails consistent with the Merton Jump Diffusion model (kurtosis > 3)?
 [Tests: Correct column naming, multi-asset analysis]
 
 Q7: Create a correlation heatmap for all macroeconomic indicators (GDP_Growth, Interest_Rate, Unemployment, Logistics, Production) during the Overheating regime only. Which pairs show the strongest relationships?
@@ -31,7 +31,7 @@ Q7: Create a correlation heatmap for all macroeconomic indicators (GDP_Growth, I
 Q8: Run data validation tests on the entire 10-year simulation. Does the data exhibit: (a) Hurst exponent > 0.5, (b) kurtosis > 3, and (c) volatility clustering? Summarize the validation results.
 [Tests: Data validation tool, interpretation]
 
-Q9: What is the average daily return for Consumer Staples (Asset_06_CST) during Shock periods versus Recovery periods? Calculate the Sharpe-like ratio (mean/std) for each.
+Q9: What is the average daily return for Consumer Staples (Asset_06_TEC) during Shock periods versus Recovery periods? Calculate the Sharpe-like ratio (mean/std) for each.
 [Tests: Complex filtering, return calculation, regime awareness]
 
 Q10: Generate a line plot showing Asset_01_TEC_Close, Asset_03_FIN_Close, and Interest_Rate on the same chart from 2025-01-01 to 2027-12-31. Include proper axis labels.
@@ -46,7 +46,7 @@ Q11: Find all assets that have a CO_MOVES_WITH correlation > 0.7 with Asset_01_T
 Q12: Which MacroVariable has the most assets SENSITIVE_TO it? Return the variable name and count of connected assets, along with the average beta coefficient.
 [Tests: Aggregation, GROUP BY equivalent]
 
-Q13: Find the causal path from any Crisis event to any Healthcare sector asset, showing the event headline, the affected asset, and the causal_lag. Sort by causal_lag descending.
+Q13: Find the causal path from any Crisis event to any Financial sector asset, showing the event headline, the affected asset, and the causal_lag. Sort by causal_lag descending.
 [Tests: Filtered traversal, property access]
 
 Q14: Identify pairs of assets from different sectors that have negative correlation (CO_MOVES_WITH correlation < -0.3). This indicates potential hedging opportunities.
@@ -79,7 +79,7 @@ Q20: Predict the crash probability for 2028-06-15 (middle of the simulation). Al
 Q21: Generate crash probability predictions for the first day of each year (2024, 2025, 2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033). Plot these as a time series and identify the highest risk periods.
 [Tests: Multiple predictions, trend analysis]
 
-Q22: Compare volatility forecasts for a Tech asset (Asset_01_TEC) vs a Utilities asset (Asset_08_UTL) during Year 7 (the Overheating period). Which sector shows higher predicted volatility?
+Q22: Compare volatility forecasts for a Tech asset (Asset_01_TEC) vs a Financial asset (Asset_08_FIN) during Year 7 (the Overheating period). Which sector shows higher predicted volatility?
 [Tests: Cross-sector volatility comparison]
 
 Q23: The Fed raised interest rates in Year 7. What does the XGBoost model predict for crash probability immediately before (2030-06-01) vs immediately after (2030-08-01) this intervention?
@@ -109,7 +109,7 @@ Q28: Predict crash probability for the year 2050 using the risk model.
 Q29: Generate a complete risk assessment report for the Energy sector (Asset_04_ENE) covering: (a) price trend analysis, (b) correlation with macro indicators, (c) causal influences from events, (d) crash probability, and (e) volatility forecast.
 [Tests: All 4 agents + Report Agent synthesis]
 
-Q30: I am an investor considering allocating funds between Technology, Healthcare, and Utilities sectors. Based on historical performance, causal relationships, current regime, and risk predictions, which sector offers the best risk-adjusted opportunity? Justify with data.
+Q30: I am an investor considering allocating funds between Technology, Financial, and Healthcare sectors. Based on historical performance, causal relationships, current regime, and risk predictions, which sector offers the best risk-adjusted opportunity? Justify with data.
 [Tests: Full multi-agent analysis + recommendation generation]
 
 Q31: Create a timeline analysis of the 10-year simulation: (a) identify major regime transitions, (b) list the most impactful events per regime, (c) show how asset correlations changed across regimes, and (d) assess overall simulation realism using validation metrics.
