@@ -41,6 +41,18 @@ class StatisticalSummaryTool(BaseTool):
     def input_schema(self) -> type[StatisticalSummaryInput]:
         return StatisticalSummaryInput
     
+    def _safe_date_range(self, df: pd.DataFrame) -> Dict[str, str]:
+        """NaT-safe date range calculation"""
+        date_start = df['Date'].dropna().min()
+        date_end = df['Date'].dropna().max()
+        
+        if pd.isnull(date_start) or pd.isnull(date_end):
+            return {"start": "N/A", "end": "N/A"}
+        return {
+            "start": date_start.strftime('%Y-%m-%d'),
+            "end": date_end.strftime('%Y-%m-%d')
+        }
+    
     def _execute(
         self,
         target_column: str,
@@ -107,10 +119,7 @@ class StatisticalSummaryTool(BaseTool):
                 "high_extreme": float(outliers_high.max()) if len(outliers_high) > 0 else None,
                 "low_extreme": float(outliers_low.min()) if len(outliers_low) > 0 else None
             },
-            "date_range": {
-                "start": df['Date'].min().strftime('%Y-%m-%d'),
-                "end": df['Date'].max().strftime('%Y-%m-%d')
-            }
+            "date_range": self._safe_date_range(df)
         }
 
         
@@ -232,6 +241,10 @@ class CorrelationMapTool(BaseTool):
         if missing:
             raise ValueError(f"Columns not found: {missing}")
         
+        # Check for empty dataframe after filtering
+        if len(df) == 0:
+            raise ValueError("No data found for specified date range")
+        
         # Compute correlation
         corr_matrix = df[columns].corr(method=method)
         
@@ -240,14 +253,23 @@ class CorrelationMapTool(BaseTool):
         if ENABLE_PLOTTING:
             plot_path = self._create_heatmap(corr_matrix, method)
         
+        # NaT-safe date range calculation
+        date_start = df['Date'].dropna().min()
+        date_end = df['Date'].dropna().max()
+        
+        if pd.isnull(date_start) or pd.isnull(date_end):
+            date_range_info = {"start": "N/A", "end": "N/A"}
+        else:
+            date_range_info = {
+                "start": date_start.strftime('%Y-%m-%d'),
+                "end": date_end.strftime('%Y-%m-%d')
+            }
+        
         return {
             "correlation_matrix": corr_matrix.to_dict(),
             "method": method,
             "columns": columns,
-            "date_range": {
-                "start": df['Date'].min().strftime('%Y-%m-%d'),
-                "end": df['Date'].max().strftime('%Y-%m-%d')
-            },
+            "date_range": date_range_info,
             "plot_path": str(plot_path) if plot_path else None
         }
     
