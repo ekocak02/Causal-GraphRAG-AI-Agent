@@ -87,7 +87,7 @@ PARAMETER EXAMPLES:
 - Statistical Summary: {{"target_column": "Asset_01_TEC_Close", "plot_type": "line", "x_column": "Date"}}
 - Correlation (3 assets): {{"columns": ["Asset_01_TEC_Close", "Asset_02_IND_Close", "Asset_03_FIN_Close"], "method": "pearson"}}
 - Correlation (macro vars): {{"columns": ["GDP_Growth", "Interest_Rate", "Unemployment"], "method": "pearson"}}
-- Correlation (all assets): {{"columns": ["Asset_01_TEC_Close", "Asset_02_IND_Close", "Asset_03_FIN_Close", "Asset_04_ENE_Close", "Asset_05_HLT_Close"], "method": "pearson"}}
+- Correlation (all assets): {{"columns": ["Asset_01_TEC_Close", "Asset_02_IND_Close", "Asset_03_FIN_Close", "Asset_04_ENE_Close", "Asset_05_HEA_Close"], "method": "pearson"}}
 - Validation: {{"start_date": "2024-01-01", "end_date": "2024-12-31"}}
 """
         
