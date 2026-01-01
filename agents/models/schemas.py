@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field
 from typing import Optional, List, Dict, Any, Literal
-from datetime import date
+from datetime import date, datetime
 
 
 #TOOL INPUTS
@@ -209,3 +209,31 @@ class AgentError(BaseModel):
     task_id: Optional[str] = None
     retry_count: int = 0
     is_recoverable: bool = True
+
+
+#COMMUNICATION LOGGING
+
+class CommunicationLog(BaseModel):
+    """Single communication step in the agent workflow"""
+    step_type: Literal[
+        "user_input",
+        "orchestrator_plan", 
+        "agent_task",
+        "agent_response",
+        "tool_call",
+        "error",
+        "report"
+    ] = Field(..., description="Type of communication step")
+    timestamp: datetime = Field(default_factory=datetime.now, description="When this step occurred")
+    agent_type: Optional[str] = Field(None, description="Agent involved (if applicable)")
+    content: str = Field(..., description="Main content/message of this step")
+    metadata: Optional[Dict[str, Any]] = Field(None, description="Additional step-specific data")
+
+
+class AgentWorkflowResult(BaseModel):
+    """Complete workflow result including report and communication logs"""
+    report: "FinalReport" = Field(..., description="Final analysis report")
+    communication_logs: List[CommunicationLog] = Field(
+        default_factory=list, 
+        description="Ordered list of all communication steps"
+    )

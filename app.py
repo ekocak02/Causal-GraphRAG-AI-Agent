@@ -166,7 +166,7 @@ def render_chatbot_tier():
         # Process with agents
         with st.chat_message("assistant"):
             with st.spinner("Analyzing..."):
-                response, agent_logs, visualizations = process_query(prompt)
+                response, agent_logs, visualizations, comm_logs = process_query(prompt)
                 st.markdown(response)
                 
                 # Show visualizations
@@ -204,31 +204,37 @@ def render_chatbot_tier():
         store_message_in_rag("assistant", response)
 
 
-def process_query(query: str) -> tuple[str, List[Dict], List[str]]:
+def process_query(query: str) -> tuple[str, List[Dict], List[str], List[Dict]]:
     """
     Process user query through agent workflow
     
     Returns:
-        Tuple of (response_text, agent_logs, visualization_paths)
+        Tuple of (response_text, agent_logs, visualization_paths, communication_logs)
     """
     agent_logs = []
     visualizations = []
+    communication_logs = []
     
     try:
         workflow = init_agents()
         if workflow is None:
-            return "Agent system not available. Please check configuration.", [], []
+            return "Agent system not available. Please check configuration.", [], [], []
         
-        # Execute query
-        report = workflow.execute_query(query)
+        # Execute query - now returns AgentWorkflowResult
+        result = workflow.execute_query(query)
+        report = result.report
         
-        # Collect agent logs
+        # Convert communication logs to dicts for session state
+        communication_logs = [log.model_dump() for log in result.communication_logs]
+        
+        # Collect agent logs (legacy format for backward compatibility)
         agent_logs.append({
             "timestamp": datetime.now().isoformat(),
             "query": query,
             "agents_used": report.agents_used,
             "confidence": report.confidence_score,
-            "findings_count": len(report.findings)
+            "findings_count": len(report.findings),
+            "communication_logs": communication_logs
         })
         
         # Collect visualizations
@@ -252,7 +258,7 @@ def process_query(query: str) -> tuple[str, List[Dict], List[str]]:
         
         response += f"\n---\n*Confidence: {report.confidence_score:.0%} | Agents: {', '.join(report.agents_used)}*"
         
-        return response, agent_logs, visualizations
+        return response, agent_logs, visualizations, communication_logs
         
     except Exception as e:
         error_msg = f"Error processing query: {str(e)}"
@@ -261,13 +267,13 @@ def process_query(query: str) -> tuple[str, List[Dict], List[str]]:
             "query": query,
             "error": str(e)
         })
-        return error_msg, agent_logs, []
+        return error_msg, agent_logs, [], []
 
 
 #AGENT COMMUNICATION
 
 def render_agent_communication_tier():
-    """Render agent communication and debugging panel"""
+    """Render agent communication timeline panel"""
     st.header("🤖 Agent Communication Panel")
     
     if not st.session_state.agent_logs:
@@ -275,40 +281,168 @@ def render_agent_communication_tier():
         return
     
     # Filter options
-    col1, col2 = st.columns([1, 3])
+    col1, col2, col3 = st.columns([1, 1, 2])
     with col1:
         show_errors_only = st.checkbox("Show Errors Only")
+    with col2:
+        show_metadata = st.checkbox("Show Details", value=True)
     
-    # Display logs
+    # Display logs for each query
     for i, log in enumerate(reversed(st.session_state.agent_logs)):
         if show_errors_only and "error" not in log:
             continue
         
         timestamp = log.get("timestamp", "Unknown time")
-        query = log.get("query", "")[:100]
+        query = log.get("query", "")[:80]
         
         with st.expander(f"🔹 Query: {query}...", expanded=(i == 0)):
-            st.markdown(f"**Timestamp:** {timestamp}")
-            
-            if "error" in log:
-                st.error(f"Error: {log['error']}")
-            else:
-                col1, col2, col3 = st.columns(3)
+            # Summary metrics
+            if "error" not in log:
+                col1, col2, col3, col4 = st.columns(4)
                 with col1:
                     agents = log.get("agents_used", [])
-                    st.metric("Agents Used", len(agents))
-                    st.caption(", ".join(agents) if agents else "None")
+                    st.metric("Agents", len(agents))
                 with col2:
                     confidence = log.get("confidence", 0)
                     st.metric("Confidence", f"{confidence:.0%}")
                 with col3:
                     findings = log.get("findings_count", 0)
                     st.metric("Findings", findings)
+                with col4:
+                    comm_logs = log.get("communication_logs", [])
+                    st.metric("Steps", len(comm_logs))
+                
+                st.divider()
+            
+            # Communication timeline
+            comm_logs = log.get("communication_logs", [])
+            if comm_logs:
+                render_communication_timeline(comm_logs, show_metadata)
+            elif "error" in log:
+                st.error(f"❌ Error: {log['error']}")
+            else:
+                st.warning("No detailed communication logs available for this query.")
     
     # Clear logs button
-    if st.button("🗑️ Clear Logs"):
+    st.divider()
+    if st.button("🗑️ Clear All Logs"):
         st.session_state.agent_logs = []
         st.rerun()
+
+
+def render_communication_timeline(comm_logs: List[Dict], show_metadata: bool):
+    """Render communication logs as a visual timeline"""
+    
+    # Define icons and colors for each step type
+    step_styles = {
+        "user_input": {"icon": "👤", "color": "#1E3A5F", "label": "User Input"},
+        "orchestrator_plan": {"icon": "🧠", "color": "#4A4A8A", "label": "Orchestrator Plan"},
+        "agent_task": {"icon": "📋", "color": "#2D5A3A", "label": "Task Assigned"},
+        "agent_response": {"icon": "✅", "color": "#1F5A3A", "label": "Agent Response"},
+        "tool_call": {"icon": "🔧", "color": "#5A4A2D", "label": "Tool Call"},
+        "error": {"icon": "❌", "color": "#5A2D2D", "label": "Error"},
+        "report": {"icon": "📊", "color": "#3A4A5A", "label": "Final Report"},
+    }
+    
+    for idx, log_entry in enumerate(comm_logs):
+        step_type = log_entry.get("step_type", "unknown")
+        style = step_styles.get(step_type, {"icon": "•", "color": "#333", "label": step_type})
+        agent_type = log_entry.get("agent_type", "")
+        content = log_entry.get("content", "")
+        metadata = log_entry.get("metadata", {})
+        
+        # Create visual timeline element
+        agent_badge = f" [{agent_type.upper()}]" if agent_type else ""
+        
+        st.markdown(f"""
+        <div style="
+            border-left: 3px solid {style['color']};
+            padding-left: 15px;
+            margin-left: 10px;
+            margin-bottom: 10px;
+        ">
+            <div style="
+                background-color: {style['color']}33;
+                padding: 10px 15px;
+                border-radius: 0 8px 8px 0;
+            ">
+                <strong>{style['icon']} {style['label']}{agent_badge}</strong>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        # Content container
+        with st.container():
+            # Main content
+            if step_type == "user_input":
+                st.markdown(f"**Query:** {content}")
+                
+            elif step_type == "orchestrator_plan":
+                st.markdown(f"**{content}**")
+                if show_metadata and metadata:
+                    tasks = metadata.get("tasks", [])
+                    if tasks:
+                        st.markdown("**Planned Tasks:**")
+                        for t in tasks:
+                            st.markdown(f"- `{t.get('agent', 'unknown')}`: {t.get('instruction', '')[:100]}...")
+                    strategy = metadata.get("execution_strategy", "")
+                    if strategy:
+                        st.caption(f"Strategy: {strategy}")
+                        
+            elif step_type == "agent_task":
+                st.markdown(f"**Instruction:** {content}")
+                if show_metadata and metadata:
+                    task_id = metadata.get("task_id", "")
+                    if task_id:
+                        st.caption(f"Task ID: `{task_id}`")
+                        
+            elif step_type == "agent_response":
+                st.success(content)
+                if show_metadata and metadata:
+                    cols = st.columns(3)
+                    with cols[0]:
+                        tools = metadata.get("tools_used", [])
+                        if tools:
+                            st.markdown(f"**Tools:** {', '.join(tools)}")
+                    with cols[1]:
+                        iters = metadata.get("iterations", 0)
+                        st.markdown(f"**Iterations:** {iters}")
+                    with cols[2]:
+                        result_summary = metadata.get("result_summary", "")
+                        if result_summary:
+                            st.markdown(f"**Result:** {result_summary[:50]}...")
+                            
+            elif step_type == "error":
+                st.error(f"**Error:** {content}")
+                if show_metadata and metadata:
+                    task_id = metadata.get("task_id", "")
+                    if task_id:
+                        st.caption(f"Failed Task: `{task_id}`")
+                        
+            elif step_type == "report":
+                st.markdown(f"**Summary:** {content}")
+                if show_metadata and metadata:
+                    cols = st.columns(3)
+                    with cols[0]:
+                        conf = metadata.get("confidence_score", 0)
+                        st.metric("Confidence", f"{conf:.0%}")
+                    with cols[1]:
+                        findings = metadata.get("findings_count", 0)
+                        st.metric("Findings", findings)
+                    with cols[2]:
+                        viz = metadata.get("visualizations_count", 0)
+                        st.metric("Visualizations", viz)
+                    
+                    recs = metadata.get("recommendations", [])
+                    if recs:
+                        with st.expander("� Recommendations"):
+                            for r in recs:
+                                st.markdown(f"- {r}")
+            else:
+                st.text(content)
+        
+        # Add spacing between timeline items
+        st.markdown("<br>", unsafe_allow_html=True)
 
 
 #STATISTICS DASHBOARD
@@ -615,12 +749,7 @@ def render_schema_details():
     - IND: Industrial
     - FIN: Financial
     - ENE: Energy
-    - HLT: Healthcare
-    - CST: Consumer Staples
-    - CSD: Consumer Discretionary
-    - UTL: Utilities
-    - MAT: Materials
-    - COM: Communications
+    - HEA: Healthcare
     """)
 
 
