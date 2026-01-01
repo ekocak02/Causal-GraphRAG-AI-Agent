@@ -65,7 +65,7 @@ TOOL SELECTION GUIDE:
 
 AVAILABLE COLUMNS FOR ANALYSIS:
 - Asset Prices: Asset_01_TEC_Close, Asset_02_IND_Close, Asset_03_FIN_Close, Asset_04_ENE_Close, Asset_05_HEA_Close, ..., Asset_10_HEA_Close
-- Macro Indicators: GDP_Growth, Interest_Rate, Unemployment
+- Macro Indicators: GDP_Growth, Interest_Rate, Unemployment, Logistics, Production
 
 INSTRUCTIONS:
 1. Choose the appropriate tool
